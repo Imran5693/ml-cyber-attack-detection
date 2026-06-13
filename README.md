@@ -151,7 +151,7 @@ docs/
 
 ### Live Hping Flood Detection
 
-![Critical Hping Detection](docs/screenshots/model_identify_hping-attack%20traffic.JPG)
+![Critical Hping Detection](docs/screenshots/Live Hping Flood Detection.JPG)
 
 
 Screenshots include:
