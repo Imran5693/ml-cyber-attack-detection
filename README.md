@@ -153,12 +153,6 @@ docs/
 
 ---
 
-### Live Hping Flood Attack Detection (Critical Severity)
-
-The Random Forest model successfully identified high-volume flood traffic generated from the Kali attacker node and classified it as a critical security event.
-
-![Hping Flood Detection](docs/screenshots/model_identify_hping-attack%20traffic.JPG)
-
 ---
 
 ### Live Traffic Detection
