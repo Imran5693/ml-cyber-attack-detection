@@ -141,17 +141,47 @@ docs/
 ```
 ## Project Screenshots
 
-### Network Topology
+### GNS3 Network Topology
 
 ![Network Topology](docs/network%20topology/network%20design-topology.jpg)
+
+---
 
 ### IDS Dashboard
 
 ![Dashboard](docs/screenshots/dashboard.JPG)
 
-### Live Hping Flood Detection
+---
 
-![Critical Hping Detection](docs/screenshots/Live Hping Flood Detection.JPG)
+### Live Hping Flood Attack Detection (Critical Severity)
+
+The Random Forest model successfully identified high-volume flood traffic generated from the Kali attacker node and classified it as a critical security event.
+
+![Hping Flood Detection](docs/screenshots/model_identify_hping-attack%20traffic.JPG)
+
+---
+
+### Live Traffic Detection
+
+The dashboard performing real-time packet analysis and machine learning-based threat classification from traffic captured through the VMware VMnet2 interface connected to the GNS3 environment.
+
+![Live Detection](docs/screenshots/live_detection.JPG)
+
+---
+
+### Nmap Scan Attack Detection
+
+The system successfully detected reconnaissance activity generated through Nmap scanning and classified the captured traffic as malicious.
+
+![Nmap Detection](docs/screenshots/nmap_live-captured-traffic_attack-results.JPG)
+
+---
+
+### Normal Traffic Detection
+
+Example of legitimate FTP traffic being analyzed and correctly classified as normal network behavior by the detection engine.
+
+![Normal FTP Traffic](docs/screenshots/normal-ftp_traffic-detection_result.JPG)
 
 
 Screenshots include:
