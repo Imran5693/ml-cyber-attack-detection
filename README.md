@@ -153,8 +153,6 @@ docs/
 
 ---
 
----
-
 ### Live Traffic Detection
 
 The dashboard performing real-time packet analysis and machine learning-based threat classification from traffic captured through the VMware VMnet2 interface connected to the GNS3 environment.
