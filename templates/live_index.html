@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>ML Cyber Attack Detection</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+    <div class="page">
+        <div class="container">
+
+            <div class="hero">
+                <h1>ML-Based Cyber Attack Detection</h1>
+                <p>
+                    Analyze uploaded traffic datasets or perform live traffic capture from the monitoring node.
+                </p>
+            </div>
+
+            {% with messages = get_flashed_messages() %}
+            {% if messages %}
+            <div class="alert-box">
+                {% for message in messages %}
+                <p>{{ message }}</p>
+                {% endfor %}
+            </div>
+            {% endif %}
+            {% endwith %}
+
+            <div class="mode-grid">
+
+                <!-- Upload CSV Mode -->
+                <div class="panel">
+                    <div class="panel-badge">Offline Analysis</div>
+                    <h2>Upload CSV Traffic</h2>
+                    <p>
+                        Upload a CSV file exported from Wireshark/TShark and analyze it using the trained ML model.
+                    </p>
+
+                    <form action="{{ url_for('upload_and_predict') }}" method="POST" enctype="multipart/form-data">
+                        <label>Traffic CSV File</label>
+                        <input type="file" name="file" accept=".csv" required>
+
+                        <label>Model</label>
+                        <select name="model_name">
+                            {% for model in available_models %}
+                            <option value="{{ model }}">{{ model }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <label class="checkbox">
+                            <input type="checkbox" name="show_only_attacks">
+                            Show only attack predictions
+                        </label>
+
+                        <button type="submit" class="btn btn-primary">Upload & Analyze</button>
+                    </form>
+                </div>
+
+                <!-- Live Capture Mode -->
+                <div class="panel panel-live">
+                    <div class="panel-badge danger-badge">Live Monitoring</div>
+                    <h2>Live Traffic Capture</h2>
+                    <p>
+                        Capture live traffic from the selected network interface, convert it to CSV, and run ML-based
+                        detection.
+                    </p>
+
+                    <form action="{{ url_for('capture_and_predict') }}" method="POST" onsubmit="showLiveProgress()">
+                        <label>Capture Interface</label>
+                        <input type="text" name="interface" placeholder="Example: 5 for VMnet2" required>
+
+                        <label>Capture Duration Seconds</label>
+                        <input type="number" name="duration" value="10" min="3" max="120" required>
+
+                        <label>Model</label>
+                        <select name="model_name">
+                            {% for model in available_models %}
+                            <option value="{{ model }}">{{ model }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <label class="checkbox">
+                            <input type="checkbox" name="show_only_attacks" checked>
+                            Show only attack predictions
+                        </label>
+
+                        <button type="submit" class="btn btn-danger">Start Live Capture & Analysis</button>
+                    </form>
+
+
+
+                </div>
+
+
+
+                <div class="footer-note">
+                    <p>
+                        Recommended interface for current GNS3/VMware monitoring setup: <strong>VMnet2 / Interface
+                            5</strong>.
+                    </p>
+                </div>
+
+            </div>
+
+            <div id="liveProgress" class="progress-box hidden">
+                    <h3 id="progressTitle">Starting live capture...</h3>
+                    <p id="progressText">Preparing monitoring interface.</p>
+
+                    <div class="progress-bar">
+                        <div id="progressFill"></div>
+                    </div>
+
+                    <div class="progress-steps">
+                        <span id="step1">1. Capturing Traffic</span>
+                        <span id="step2">2. Saving CSV</span>
+                        <span id="step3">3. Model Analysis</span>
+                        <span id="step4">4. Generating Report</span>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+        <script>
+            function showLiveProgress() {
+                const mainGrid = document.querySelector(".mode-grid");
+                const footerNote = document.querySelector(".footer-note");
+                const hero = document.querySelector(".hero");
+                const box = document.getElementById("liveProgress");
+                const title = document.getElementById("progressTitle");
+                const text = document.getElementById("progressText");
+                const fill = document.getElementById("progressFill");
+
+                if (mainGrid) mainGrid.style.display = "none";
+                if (footerNote) footerNote.style.display = "none";
+                if (hero) {
+                    hero.querySelector("h1").innerText = "Live Detection in Progress";
+                    hero.querySelector("p").innerText = "Please keep traffic running while the system captures and analyzes packets.";
+                }
+
+                box.classList.remove("hidden");
+                box.classList.add("progress-fullscreen");
+
+                let progress = 0;
+                let seconds = 0;
+
+                const interval = setInterval(() => {
+                    seconds++;
+                    progress += 8;
+
+                    if (progress <= 40) {
+                        title.innerText = "Capturing live traffic...";
+                        text.innerText = "Monitoring network packets for " + seconds + " seconds.";
+                        document.getElementById("step1").classList.add("active-step");
+                    } else if (progress <= 65) {
+                        title.innerText = "Saving captured traffic...";
+                        text.innerText = "Captured packets are being written into CSV format.";
+                        document.getElementById("step2").classList.add("active-step");
+                    } else if (progress <= 85) {
+                        title.innerText = "Running ML model analysis...";
+                        text.innerText = "The selected model is analyzing traffic behavior.";
+                        document.getElementById("step3").classList.add("active-step");
+                    } else {
+                        title.innerText = "Generating final detection report...";
+                        text.innerText = "Preparing SOC-style detection result dashboard.";
+                        document.getElementById("step4").classList.add("active-step");
+                    }
+
+                    if (progress > 95) progress = 95;
+                    fill.style.width = progress + "%";
+                }, 1000);
+            }
+        </script>
+
+</body>
+
+</html>

@@ -1,0 +1,4 @@
+Model,Accuracy,Attack_Precision,Attack_Recall,Attack_F1
+Random Forest,0.9851,0.9931,0.9863,0.9897
+SVM (RBF),0.9061,0.9775,0.8909,0.9322
+Isolation Forest,0.6682,0.8521,0.6561,0.7414

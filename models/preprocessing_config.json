@@ -1,0 +1,79 @@
+{
+  "project_name": "ML Based Cyber Attack Detection",
+
+  "dataset_used_for_encoder_rebuild":
+    "datasets/processed/master_dataset_balanced_v1.csv",
+
+  "final_feature_order": [
+    "protocol",
+    "source_port",
+    "length",
+    "tcp_flags",
+    "dst_port",
+    "delta_time",
+    "info"
+  ],
+
+  "target_column": "label",
+
+  "categorical_columns": [
+    "protocol",
+    "tcp_flags",
+    "info"
+  ],
+
+  "numeric_columns": [
+    "source_port",
+    "length",
+    "dst_port",
+    "delta_time"
+  ],
+
+  "dropped_columns_before_training": [
+    "no_",
+    "source",
+    "destination",
+    "traffic_type",
+    "source_file",
+    "time",
+    "stream_id"
+  ],
+
+  "model_artifacts": {
+    "random_forest": {
+      "model_path":
+        "models/random_forest/rf_behavioral_final.pkl",
+
+      "features_path":
+        "models/random_forest/features.txt",
+
+      "scaler_required": false
+    },
+
+    "svm": {
+      "model_path":
+        "models/svm/svm_behavioral_v1.pkl",
+
+      "features_path":
+        "models/svm/features.txt",
+
+      "scaler_required": true,
+
+      "scaler_path":
+        "models/svm/svm_scaler_v1.pkl"
+    },
+
+    "isolation_forest": {
+      "model_path":
+        "models/isolation_forest/iforest_behavioral_v1.pkl",
+
+      "features_path":
+        "models/isolation_forest/features.txt",
+
+      "scaler_required": true,
+
+      "scaler_path":
+        "models/isolation_forest/iforest_scaler_v1.pkl"
+    }
+  }
+}

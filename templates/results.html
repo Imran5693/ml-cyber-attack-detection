@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Detection Results</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+<div class="page">
+    <div class="container container-wide">
+
+        <div class="top-bar">
+            <div>
+                <h1>Detection Results</h1>
+                <p class="subtitle">Traffic analyzed using ML-based cyber attack detection.</p>
+            </div>
+            <a href="{{ url_for('index') }}" class="btn btn-primary">Back to Dashboard</a>
+        </div>
+
+        <div class="threat-banner severity-{{ attack_summary.severity|lower }}">
+            <div>
+                <span class="banner-label">Likely Attack</span>
+                <h2>{{ attack_summary.attack_type }}</h2>
+            </div>
+            <div>
+                <span class="banner-label">Severity</span>
+                <h2>{{ attack_summary.severity }}</h2>
+            </div>
+        </div>
+
+        <div class="summary">
+            <div class="card">
+                <span class="card-title">Total Rows</span>
+                <strong>{{ total_rows }}</strong>
+            </div>
+            <div class="card card-normal">
+                <span class="card-title">Normal</span>
+                <strong>{{ normal_count }}</strong>
+            </div>
+            <div class="card card-attack">
+                <span class="card-title">Attacks</span>
+                <strong>{{ attack_count }}</strong>
+            </div>
+            <div class="card">
+                <span class="card-title">Attack Ratio</span>
+                <strong>{{ attack_summary.attack_ratio }}%</strong>
+            </div>
+        </div>
+
+        <div class="meta-grid">
+            <div class="meta-item">
+                <span class="meta-label">Source File</span>
+                <span class="meta-value">{{ uploaded_file }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Model</span>
+                <span class="meta-value">{{ model_name }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Top Attacker</span>
+                <span class="meta-value danger-text">{{ attack_summary.top_source }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Top Target</span>
+                <span class="meta-value">{{ attack_summary.top_target }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Filtered View</span>
+                <span class="meta-value">{{ "Only attacks" if show_only_attacks else "All predictions" }}</span>
+            </div>
+            <div class="meta-item">
+                <span class="meta-label">Saved Report</span>
+                <span class="meta-value">{{ saved_report }}</span>
+            </div>
+        </div>
+
+        <div class="table-section">
+            <div class="table-header">
+                <h3>Prediction Preview</h3>
+                <p>Maximum {{ preview_limit }} rows shown for browser performance.</p>
+            </div>
+
+            <div class="table-wrapper">
+                <table>
+                    <thead>
+                    <tr>
+                        {% for col in columns %}
+                            <th>{{ col }}</th>
+                        {% endfor %}
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for row in records %}
+                        <tr>
+                            {% for col in columns %}
+                                {% if col == "prediction_label" %}
+                                    <td class="{{ 'label-attack' if row[col] == 'attack' else 'label-normal' }}">
+                                        {{ row[col] }}
+                                    </td>
+                                {% elif col == "confidence" and row[col] is not none %}
+                                    <td>{{ "%.4f"|format(row[col]) }}</td>
+                                {% else %}
+                                    <td>{{ row[col] }}</td>
+                                {% endif %}
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
