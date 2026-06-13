@@ -139,6 +139,20 @@ docs/
 ├── screenshots/
 └── sequence diagrams/
 ```
+## Project Screenshots
+
+### Network Topology
+
+![Network Topology](docs/network%20topology/network%20design-topology.jpg)
+
+### IDS Dashboard
+
+![Dashboard](docs/screenshots/dashboard.JPG)
+
+### Live Hping Flood Detection
+
+![Critical Hping Detection](docs/screenshots/model_identify_hping-attack%20traffic.JPG)
+
 
 Screenshots include:
 
